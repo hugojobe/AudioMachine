@@ -7,14 +7,14 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
-    private const string AUDIO_MIXER_PATH = "Audio/Main";  // Path to the main audio mixer
-    private const string MUSIC_PATH = "Audio/Musics/";     // Path to the musics
-    private const string SFX_PATH = "Audio/SFXs/";         // Path to the sfxs
-    private const string AUDIO_MIXER_MUSIC = "Music";      // Name of the music mixer group
-    private const string AUDIO_MIXER_SFX = "Sfx";          // Name of the sfx mixer group
+    private const string AUDIO_MIXER_PATH = "Audio/Main";
+    private const string MUSIC_PATH = "Audio/Musics/";
+    private const string SFX_PATH = "Audio/SFXs/";
+    private const string AUDIO_MIXER_MUSIC = "Music";
+    private const string AUDIO_MIXER_SFX = "Sfx";
 
-    private const string MUSIC_GAMEOBJECT_NAME = "Music - [{0}]";  // {0} = Music channel id
-    public const string SFX_GAMEOBJECT_NAME = "SFX - [{0}]";       // {0} = SFX name
+    private const string MUSIC_GAMEOBJECT_NAME = "Music - [{0}]";  // {0} = Music channel
+    public const string SFX_GAMEOBJECT_NAME = "SFX - [{0}]";      // {0} = SFX name
     
     private static Dictionary<int, GameObject> musicChannels = new Dictionary<int, GameObject>();
     private static List<GameObject> sfxPool = new List<GameObject>();
@@ -54,14 +54,14 @@ public class AudioManager : MonoBehaviour
         sfxParent.transform.SetParent(audioSourcesParent.transform);
     }
 
-    public static void PlaySfx(string sfxName, float volume = 1f, float pitch = 1f) {
+    public static AudioSource PlaySfx(string sfxName, float volume = 1f, float pitch = 1f) {
         AudioClip clip = Resources.Load<AudioClip>(SFX_PATH + sfxName);
         if(!clip) {
             Debug.LogError($"SFX file '{sfxName}' not found at path '{SFX_PATH + sfxName}'");
-            return;
+            return null;
         }
 
-        PlaySfx(clip, volume, pitch);
+        return PlaySfx(clip, volume, pitch);
     }
 
     public static AudioSource PlaySfx(AudioClip sfxClip, float volume = 1f, float pitch = 1f) {
@@ -157,11 +157,11 @@ public class AudioManager : MonoBehaviour
         }
     }
     
-    public static void StopMusic(int channel, bool instant = false) {
+    public static void StopMusic(int channel, bool instant = false, float fadeDuration = 1f) {
         if (musicChannels.TryGetValue(channel, out GameObject currentMusicChannel)) {
             AudioSource currentSource = currentMusicChannel.GetComponent<AudioSource>();
             if (!instant) {
-                currentSource.DOFade(0f, 1f).OnComplete(() => {
+                currentSource.DOFade(0f, fadeDuration).OnComplete(() => {
                     currentSource.Stop();
                 });
             }
