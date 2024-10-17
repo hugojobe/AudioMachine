@@ -7,14 +7,14 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
-    private const string AUDIO_MIXER_PATH = "Audio/Main";
-    private const string MUSIC_PATH = "Audio/Musics/";
-    private const string SFX_PATH = "Audio/SFXs/";
-    private const string AUDIO_MIXER_MUSIC = "Music";
-    private const string AUDIO_MIXER_SFX = "Sfx";
+    private const string AUDIO_MIXER_PATH = "Audio/Main";  // Path to the main audio mixer
+    private const string MUSIC_PATH = "Audio/Musics/";     // Path to the musics
+    private const string SFX_PATH = "Audio/SFXs/";         // Path to the sfxs
+    private const string AUDIO_MIXER_MUSIC = "Music";      // Name of the music mixer group
+    private const string AUDIO_MIXER_SFX = "Sfx";          // Name of the sfx mixer group
 
-    private const string MUSIC_GAMEOBJECT_NAME = "Music - [{0}]";  // {0} = Music channel
-    public const string SFX_GAMEOBJECT_NAME = "SFX - [{0}]";      // {0} = SFX name
+    private const string MUSIC_GAMEOBJECT_NAME = "Music - [{0}]";  // {0} = Music channel id
+    public const string SFX_GAMEOBJECT_NAME = "SFX - [{0}]";       // {0} = SFX name
     
     private static Dictionary<int, GameObject> musicChannels = new Dictionary<int, GameObject>();
     private static List<GameObject> sfxPool = new List<GameObject>();
@@ -35,24 +35,6 @@ public class AudioManager : MonoBehaviour
         }
         
         InitializeAudioMixers();
-    }
-
-    private void Update() {
-        if(Input.GetKeyDown(KeyCode.Keypad1)) {
-            PlaySfx("melee");
-        }
-        
-        if(Input.GetKeyDown(KeyCode.Keypad4)) {
-            PlaySfx("melee2");
-        }
-        
-        if(Input.GetKeyDown(KeyCode.Keypad2)) {
-            PlayMusic("menu", 0, fadeDuration: 1f);
-        }
-        
-        if(Input.GetKeyDown(KeyCode.Keypad5)) {
-            PlayMusic("gameplay", 0, fadeDuration: 1f);
-        }
     }
 
     private void InitializeAudioMixers() {
